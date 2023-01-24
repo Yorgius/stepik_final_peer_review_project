@@ -12,6 +12,13 @@ class ProductPage(BasePage):
         self.add_to_cart_btn: bool = self.is_element_present(*ProductPageLocators.ADD_TO_CART_BUTTON)
         assert self.product_name and self.product_price and self.add_to_cart_btn, 'this is not product page!'
 
+    def should_be_basket_link(self):
+        assert self.is_element_present(*ProductPageLocators.BASKET_LINK), 'This page does not contain basket link'
+
+    def go_to_basket(self):
+        basket_link = self.browser.find_element(*ProductPageLocators.BASKET_LINK)
+        basket_link.click()
+
     def add_product_to_cart(self):
         add_button = self.browser.find_element(*ProductPageLocators.ADD_TO_CART_BUTTON)
         add_button.click()
@@ -42,6 +49,6 @@ class ProductPage(BasePage):
             'success message is present'
 
     def is_not_success_message_disappeared(self):
-        assert self.is_not_disappeared(*ProductPageLocators.SUCCESS_MESSAGES_BLOCK) \
-            and self.is_not_disappeared(*ProductPageLocators.SUCCESS_MESSAGE_CART_AMOUNT), \
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGES_BLOCK) \
+            and self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE_CART_AMOUNT), \
             'is not disappeared wrong result'
