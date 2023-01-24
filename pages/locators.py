@@ -2,11 +2,12 @@ from selenium.webdriver.common.by import By
 
 
 class MainPageLocators:
-    LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
+    LOGIN_LINK = (By.ID, "login_link")
+    BASKET_LINK = (By.XPATH, "//a[text()='Посмотреть корзину']")
 
 
 class LoginPageLocators:
-    URL = 'http://selenium1py.pythonanywhere.com/ru/accounts/login/'
+    # URL = 'http://selenium1py.pythonanywhere.com/ru/accounts/login/'
     LOGIN_FORM = (By.ID, 'login_form')
     REGISTER_FORM = (By.ID, 'register_form')
 
@@ -18,3 +19,6 @@ class ProductPageLocators:
     SUCCESS_MESSAGES_BLOCK = (By.ID, 'messages')
     SUCCESS_MESSAGE_PRODUCT_NAME = (By.CSS_SELECTOR, '#messages > .alert:nth-child(1) strong')
     SUCCESS_MESSAGE_CART_AMOUNT = (By.CSS_SELECTOR, '#messages > .alert:nth-child(3) strong')
+
+class BasketPageLocators:
+    ...

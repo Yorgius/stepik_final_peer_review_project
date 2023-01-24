@@ -11,7 +11,7 @@ class BasePage:
     def open(self) -> None:
         self.browser.get(self.url)
 
-    def is_element_present(self, condition_search, selector_search) -> bool:
+    def is_element_present(self, condition_search: str, selector_search: str) -> bool:
         try:
             self.browser.find_element(condition_search, selector_search)
         except NoSuchElementException:
