@@ -21,4 +21,5 @@ class ProductPageLocators:
     SUCCESS_MESSAGE_CART_AMOUNT = (By.CSS_SELECTOR, '#messages > .alert:nth-child(3) strong')
 
 class BasketPageLocators:
-    ...
+    BASKET_ITEMS = (By.CLASS_NAME, 'basket-items')
+    EMPTY_BASKET_LABEL = (By.CSS_SELECTOR, '#content_inner>p')

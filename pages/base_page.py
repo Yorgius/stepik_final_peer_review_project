@@ -34,9 +34,16 @@ class BasePage:
             return False
         return True
 
+    # def get_element(self, condition_search, selector_search):
+    #     try:
+    #         element = self.browser.find_element(condition_search, selector_search)
+    #     except NoSuchElementException:
+    #         return None
+    #     return element
+
     def get_text(self, condition_search, selector_search) -> str:
         try:
             element = self.browser.find_element(condition_search, selector_search)
-            return element.text
         except NoSuchElementException:
             return ''
+        return element.text
