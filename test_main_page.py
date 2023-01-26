@@ -5,8 +5,9 @@ import time
 from .pages.main_page import MainPage
 from .pages.login_page import LoginPage
 from .pages.basket_page import BasketPage
+from .pages.locators import MainPageLocators
 
-MAIN_PAGE_URL = "http://selenium1py.pythonanywhere.com/"
+MAIN_PAGE_URL = MainPageLocators.URL
 
 @pytest.mark.main_to_login
 def test_guest_can_go_to_login_page(browser):
