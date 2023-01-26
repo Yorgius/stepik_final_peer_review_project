@@ -19,4 +19,14 @@ class MainPage(BasePage):
         basket_link = self.browser.find_element(*MainPageLocators.BASKET_LINK)
         basket_link.click()
 
+    def should_be_delete_user_success_message(self):
+        assert self.is_element_present(*MainPageLocators.DELETE_USER_SUCCESS_MESSAGE), \
+            'Success delete user message is not present'
+
+    def is_delete_success(self):
+        self.should_be_delete_user_success_message()
+        message_string = "Ваш профиль удален"
+        assert self.browser.find_element(*MainPageLocators.DELETE_USER_SUCCESS_MESSAGE).text.__contains__(message_string), \
+            f"success delete message is not contains <{message_string}>"
+
     
