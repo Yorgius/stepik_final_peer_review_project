@@ -4,89 +4,84 @@ from .pages.basket_page import BasketPage
 from .pages.login_page import LoginPage
 from .pages.profile_page import ProfilePage, DeleteProfilePage
 
-from .pages.locators import LoginPageLocators, ProfilePageLocators
+from .pages.locators import ProductPageLocators, LoginPageLocators, ProfilePageLocators
 
 import pytest
 import time
 
 
-PRODUCT_PAGE_URL = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+PRODUCT_PAGE_URL = ProductPageLocators.URL
+
+# test class to add to cart from product page for non logged
+@pytest.mark.in_guest
+class TestGuestAddToBasketFromProductPage:
+    @pytest.mark.parametrize('promo_offer_code', ['0', '1', '2', '3', '4', '5', '6', \
+        pytest.param('7', marks=pytest.mark.xfail), '8', '9'])
+    def test_add_to_basket_product(self, browser: object, promo_offer_code: str) -> None:
+        url: str = PRODUCT_PAGE_URL[:-1] + promo_offer_code
+        product_page = ProductPage(browser, url)
+        product_page.open()
+        product_page.should_be_product_page()
+        product_page.add_product_to_cart()
+        product_page.solve_quiz_and_get_code()
+        product_page.is_product_added()
+        
+    @pytest.mark.skip
+    @pytest.mark.parametrize('promo_offer_code', ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+    def test_guest_cant_see_success_message_after_adding_product_to_basket(self, browser: object, promo_offer_code: str) -> None:
+        url: str = PRODUCT_PAGE_URL[:-1] + promo_offer_code
+        product_page = ProductPage(browser, url)
+        product_page.open()
+        product_page.should_be_product_page()
+        product_page.add_product_to_cart()
+        product_page.solve_quiz_and_get_code()
+        product_page.is_not_success_message_present()
 
 
-@pytest.mark.parametrize('promo_offer_code', ['0', '1', '2', '3', '4', '5', '6', \
-    pytest.param('7', marks=pytest.mark.xfail), '8', '9'])
-def test_add_to_basket_product(browser, promo_offer_code):
-    url: str = PRODUCT_PAGE_URL[:-1] + promo_offer_code
-    product_page = ProductPage(browser, url)
-    
-    product_page.open()
-    product_page.should_be_product_page()
-    product_page.add_product_to_cart()
-    product_page.solve_quiz_and_get_code()
-    product_page.check_added_product()
-    
-@pytest.mark.skip
-@pytest.mark.parametrize('promo_offer_code', ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
-def test_guest_cant_see_success_message_after_adding_product_to_basket(browser, promo_offer_code):
-    url: str = PRODUCT_PAGE_URL[:-1] + promo_offer_code
-    product_page = ProductPage(browser, url)
-
-    product_page.open()
-    product_page.should_be_product_page()
-    product_page.add_product_to_cart()
-    product_page.solve_quiz_and_get_code()
-    product_page.is_not_success_message_present()
+    @pytest.mark.parametrize('promo_offer_code', ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+    def test_guest_cant_see_success_message(self, browser: object, promo_offer_code: str) -> None:
+        url: str = PRODUCT_PAGE_URL[:-1] + promo_offer_code
+        product_page = ProductPage(browser, url)
+        product_page.open()
+        product_page.is_not_success_message_present()
 
 
-@pytest.mark.parametrize('promo_offer_code', ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
-def test_guest_cant_see_success_message(browser, promo_offer_code):
-    url: str = PRODUCT_PAGE_URL[:-1] + promo_offer_code
-    product_page = ProductPage(browser, url)
-
-    product_page.open()
-    product_page.is_not_success_message_present()
-
-
-@pytest.mark.skip
-@pytest.mark.parametrize('promo_offer_code', ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
-def test_message_disappeared_after_adding_product_to_basket(browser, promo_offer_code):
-    url: str = PRODUCT_PAGE_URL[:-1] + promo_offer_code
-    product_page = ProductPage(browser, url)
-
-    product_page.open()
-    product_page.should_be_product_page()
-    product_page.add_product_to_cart()
-    product_page.solve_quiz_and_get_code()
-    product_page.is_not_success_message_disappeared()
+    @pytest.mark.skip
+    @pytest.mark.parametrize('promo_offer_code', ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+    def test_message_disappeared_after_adding_product_to_basket(self, browser: object, promo_offer_code: str) -> None:
+        url: str = PRODUCT_PAGE_URL[:-1] + promo_offer_code
+        product_page = ProductPage(browser, url)
+        product_page.open()
+        product_page.should_be_product_page()
+        product_page.add_product_to_cart()
+        product_page.solve_quiz_and_get_code()
+        product_page.is_not_success_message_disappeared()
 
 
-@pytest.mark.from_product_to_basket
-def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
-    product_page = ProductPage(browser, PRODUCT_PAGE_URL)
-    product_page.open()
-    product_page.should_be_basket_link()
-    product_page.go_to_basket()
+    @pytest.mark.from_product_to_basket
+    def test_guest_cant_see_product_in_basket_opened_from_product_page(self, browser: object) -> None:
+        product_page = ProductPage(browser, PRODUCT_PAGE_URL)
+        product_page.open()
+        product_page.should_be_basket_link()
+        product_page.go_to_basket()
 
-    basket_page = BasketPage(browser, browser.current_url)
-    basket_page.should_be_basket_page()
-    basket_page.no_items_in_the_basket()
-    basket_page.should_be_empty_basket_label()
-    basket_page.empty_basket_label_is_not_disappeared()
+        basket_page = BasketPage(browser, browser.current_url)
+        basket_page.should_be_basket_page()
+        basket_page.no_items_in_the_basket()
+        basket_page.should_be_empty_basket_label()
+        basket_page.empty_basket_label_is_not_disappeared()
 
 
 # test class to add to cart from product page for logged in user
-@pytest.mark.smoke
+@pytest.mark.in_user
 class TestUserAddToBasketFromProductPage:
-
     @pytest.fixture(scope="function", autouse=True)
-    def setup(self, browser):
-        print("\nsetup - start ...")
-
+    def setup(self, browser: object) -> bool:
         str_for_test_user = str(time.time())
         email = str_for_test_user + '@fakemail.com'
         psw = str_for_test_user
 
-        # register new test user
+        # register new test user and check authorization
         login_page = LoginPage(browser, LoginPageLocators.URL)
         login_page.open()
         login_page.should_be_login_page()
@@ -96,7 +91,6 @@ class TestUserAddToBasketFromProductPage:
         
         yield True
 
-        print("\nsetup - end ...")
         # delete test user
         profile_page = ProfilePage(browser, ProfilePageLocators.URL)
         profile_page.open()
@@ -109,10 +103,8 @@ class TestUserAddToBasketFromProductPage:
 
         main_page = MainPage(browser, browser.current_url)
         main_page.is_delete_success()
-        print("test user deleted")
 
-
-    def test_user_add_to_basket_from_product_page(self, browser):
+    def test_user_add_to_basket_from_product_page(self, browser: object) -> None:
         product_page = ProductPage(browser, "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0")
         product_page.open()
         product_page.should_be_product_page()
@@ -120,7 +112,7 @@ class TestUserAddToBasketFromProductPage:
         product_page.solve_quiz_and_get_code()
         product_page.is_product_added()
 
-    def test_user_cant_see_success_message_in_product_page(self, browser):
+    def test_user_cant_see_success_message_in_product_page(self, browser: object) -> None:
         product_page = ProductPage(browser, "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0")
         product_page.open()
         product_page.is_not_success_message_present()
