@@ -15,3 +15,7 @@ class BasketPage(BasePage):
 
     def empty_basket_label_is_not_disappeared(self):
         assert not self.is_disappeared(*BasketPageLocators.EMPTY_BASKET_LABEL), 'Empty basket label disappeared!'
+
+    def is_basket_empty(self):
+        self.should_be_empty_basket_label()
+        self.empty_basket_label_is_not_disappeared()
