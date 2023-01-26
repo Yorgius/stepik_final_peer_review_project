@@ -1,5 +1,10 @@
+from .pages.main_page import MainPage
 from .pages.product_page import ProductPage
 from .pages.basket_page import BasketPage
+from .pages.login_page import LoginPage
+from .pages.profile_page import ProfilePage, DeleteProfilePage
+
+from .pages.locators import LoginPageLocators, ProfilePageLocators
 
 import pytest
 import time
@@ -10,7 +15,7 @@ PRODUCT_PAGE_URL = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-wo
 
 @pytest.mark.parametrize('promo_offer_code', ['0', '1', '2', '3', '4', '5', '6', \
     pytest.param('7', marks=pytest.mark.xfail), '8', '9'])
-def test_add_to_cart_product2(browser, promo_offer_code):
+def test_add_to_basket_product(browser, promo_offer_code):
     url: str = PRODUCT_PAGE_URL[:-1] + promo_offer_code
     product_page = ProductPage(browser, url)
     
@@ -68,3 +73,54 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     basket_page.should_be_empty_basket_label()
     basket_page.empty_basket_label_is_not_disappeared()
 
+
+# test class to add to cart from product page for logged in user
+@pytest.mark.smoke
+class TestUserAddToBasketFromProductPage:
+
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        print("\nsetup - start ...")
+
+        str_for_test_user = str(time.time())
+        email = str_for_test_user + '@fakemail.com'
+        psw = str_for_test_user
+
+        # register new test user
+        login_page = LoginPage(browser, LoginPageLocators.URL)
+        login_page.open()
+        login_page.should_be_login_page()
+        login_page.register_new_user(email, psw)
+        login_page.should_be_authorized_user()
+        print("test user created")
+        
+        yield True
+
+        print("\nsetup - end ...")
+        # delete test user
+        profile_page = ProfilePage(browser, ProfilePageLocators.URL)
+        profile_page.open()
+        profile_page.should_be_profile_page()
+        profile_page.start_delete_user()
+
+        profile_delete_page = DeleteProfilePage(browser, browser.current_url)
+        profile_delete_page.should_be_delete_profile_page()
+        profile_delete_page.delete_user(psw)
+
+        main_page = MainPage(browser, browser.current_url)
+        main_page.is_delete_success()
+        print("test user deleted")
+
+
+    def test_user_add_to_basket_from_product_page(self, browser):
+        product_page = ProductPage(browser, "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0")
+        product_page.open()
+        product_page.should_be_product_page()
+        product_page.add_product_to_cart()
+        product_page.solve_quiz_and_get_code()
+        product_page.is_product_added()
+
+    def test_user_cant_see_success_message_in_product_page(self, browser):
+        product_page = ProductPage(browser, "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0")
+        product_page.open()
+        product_page.is_not_success_message_present()
