@@ -3,11 +3,11 @@ from selenium.webdriver.common.by import By
 
 class BasePageLocators:
     USER_ICON = (By.CSS_SELECTOR, ".icon-user")
+    LOGIN_LINK = (By.ID, "login_link")
 
 
 class MainPageLocators:
     URL = "http://selenium1py.pythonanywhere.com/"
-    LOGIN_LINK = (By.ID, "login_link")
     BASKET_LINK = (By.XPATH, "//a[text()='Посмотреть корзину']")
     DELETE_USER_SUCCESS_MESSAGE = (By.CLASS_NAME, "alertinner")
 

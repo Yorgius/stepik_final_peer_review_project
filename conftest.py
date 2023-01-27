@@ -6,7 +6,7 @@ import  pytest
 
 def pytest_addoption(parser):
     parser.addoption(
-        '--lang',
+        '--language',
         action='store',
         default='ru',
         help='Please choose language settings: en, ru, fr or another'
@@ -14,7 +14,7 @@ def pytest_addoption(parser):
 
 @pytest.fixture
 def browser(request) -> object:
-    lang: str = request.config.getoption('lang')
+    lang: str = request.config.getoption('language')
 
     options = Options()
     options.add_experimental_option('prefs', {'intl.accept_languages': lang})

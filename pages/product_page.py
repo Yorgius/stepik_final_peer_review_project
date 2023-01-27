@@ -19,7 +19,7 @@ class ProductPage(BasePage):
         basket_link = self.browser.find_element(*ProductPageLocators.BASKET_LINK)
         basket_link.click()
 
-    def add_product_to_cart(self):
+    def add_product_to_basket(self):
         add_button = self.browser.find_element(*ProductPageLocators.ADD_TO_CART_BUTTON)
         add_button.click()
 
