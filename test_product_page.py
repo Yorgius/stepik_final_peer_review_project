@@ -12,17 +12,31 @@ import time
 
 PRODUCT_PAGE_URL = ProductPageLocators.URL
 
-# test class to add to cart from product page for non logged
+
+# test loading the login page from the product page for an unregistered user
+@pytest.mark.need_review
+def test_guest_can_go_to_login_page_from_product_page(browser: object) -> None:
+    product_page = ProductPage(browser, PRODUCT_PAGE_URL)
+    product_page.open()
+    product_page.should_be_product_page()
+    product_page.should_be_login_link()
+    product_page.go_to_login_page()
+
+    login_page = LoginPage(browser, browser.current_url)
+    login_page.should_be_login_page()
+
+# test class to add to cart from product page for non logged user
 @pytest.mark.in_guest
 class TestGuestAddToBasketFromProductPage:
+    @pytest.mark.need_review
     @pytest.mark.parametrize('promo_offer_code', ['0', '1', '2', '3', '4', '5', '6', \
         pytest.param('7', marks=pytest.mark.xfail), '8', '9'])
-    def test_add_to_basket_product(self, browser: object, promo_offer_code: str) -> None:
+    def test_guest_can_add_product_to_basket(self, browser: object, promo_offer_code: str) -> None:
         url: str = PRODUCT_PAGE_URL[:-1] + promo_offer_code
         product_page = ProductPage(browser, url)
         product_page.open()
         product_page.should_be_product_page()
-        product_page.add_product_to_cart()
+        product_page.add_product_to_basket()
         product_page.solve_quiz_and_get_code()
         product_page.is_product_added()
         
@@ -33,7 +47,7 @@ class TestGuestAddToBasketFromProductPage:
         product_page = ProductPage(browser, url)
         product_page.open()
         product_page.should_be_product_page()
-        product_page.add_product_to_cart()
+        product_page.add_product_to_basket()
         product_page.solve_quiz_and_get_code()
         product_page.is_not_success_message_present()
 
@@ -53,12 +67,12 @@ class TestGuestAddToBasketFromProductPage:
         product_page = ProductPage(browser, url)
         product_page.open()
         product_page.should_be_product_page()
-        product_page.add_product_to_cart()
+        product_page.add_product_to_basket()
         product_page.solve_quiz_and_get_code()
         product_page.is_not_success_message_disappeared()
 
 
-    @pytest.mark.from_product_to_basket
+    @pytest.mark.need_review
     def test_guest_cant_see_product_in_basket_opened_from_product_page(self, browser: object) -> None:
         product_page = ProductPage(browser, PRODUCT_PAGE_URL)
         product_page.open()
@@ -104,15 +118,16 @@ class TestUserAddToBasketFromProductPage:
         main_page = MainPage(browser, browser.current_url)
         main_page.is_delete_success()
 
-    def test_user_add_to_basket_from_product_page(self, browser: object) -> None:
+    @pytest.mark.need_review
+    def test_user_can_add_product_to_basket(self, browser: object) -> None:
         product_page = ProductPage(browser, "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0")
         product_page.open()
         product_page.should_be_product_page()
-        product_page.add_product_to_cart()
+        product_page.add_product_to_basket()
         product_page.solve_quiz_and_get_code()
         product_page.is_product_added()
 
-    def test_user_cant_see_success_message_in_product_page(self, browser: object) -> None:
+    def test_user_cant_see_success_message(self, browser: object) -> None:
         product_page = ProductPage(browser, "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0")
         product_page.open()
         product_page.is_not_success_message_present()
