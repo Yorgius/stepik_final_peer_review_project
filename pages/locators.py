@@ -32,7 +32,7 @@ class ProfilePageLocators:
 
 
 class ProductPageLocators:
-    URL = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+    URL = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
     PRODUCT_NAME = (By.CSS_SELECTOR, '.product_main > h1')
     PRODUCT_PRICE = (By.CSS_SELECTOR, '.product_main > p.price_color')
     ADD_TO_CART_BUTTON = (By.CLASS_NAME, 'btn-add-to-basket')

@@ -8,7 +8,7 @@ from .locators import ProductPageLocators, BasePageLocators
 class ProductPage(BasePage):
     def should_be_product_page(self):
         self.product_name: str = self.get_text(*ProductPageLocators.PRODUCT_NAME)
-        self.product_price: str = self.get_text(*ProductPageLocators.PRODUCT_PRICE)[:4]
+        self.product_price: str = self.get_text(*ProductPageLocators.PRODUCT_PRICE)
         add_to_basket_btn: bool = self.is_element_present(*ProductPageLocators.ADD_TO_CART_BUTTON)
         assert self.product_name and self.product_price and add_to_basket_btn, 'this is not product page!'
 
@@ -25,23 +25,26 @@ class ProductPage(BasePage):
 
     def is_product_added(self):
         success_product_name: str = self.get_text(*ProductPageLocators.SUCCESS_MESSAGE_PRODUCT_NAME)
-        success_cart_price: str = self.get_text(*ProductPageLocators.SUCCESS_MESSAGE_CART_AMOUNT)[:4]
+        success_cart_price: str = self.get_text(*ProductPageLocators.SUCCESS_MESSAGE_CART_AMOUNT)
         checking: bool = self.product_name == success_product_name and self.product_price == success_cart_price
-        assert checking, 'added the wrong product'
+        assert checking, 'the information from the product page and the information in the cart do not match'
         
     def solve_quiz_and_get_code(self):
-        alert = self.browser.switch_to.alert
-        x = alert.text.split()[2]
-        answer = str(math.log(abs((12 * math.sin(float(x))))))
-        alert.send_keys(answer)
-        alert.accept()
         try:
             alert = self.browser.switch_to.alert
-            alert_text = alert.text
-            print(f"Your code: {alert_text}")
+            x = alert.text.split()[2]
+            answer = str(math.log(abs((12 * math.sin(float(x))))))
+            alert.send_keys(answer)
             alert.accept()
+            try:
+                alert = self.browser.switch_to.alert
+                alert_text = alert.text
+                print(f"Your code: {alert_text}")
+                alert.accept()
+            except NoAlertPresentException:
+                print("No second alert presented")
         except NoAlertPresentException:
-            print("No second alert presented")
+            assert False, 'No alert presented'
 
     def is_not_success_message_present(self):
         assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE_PRODUCT_NAME) \
