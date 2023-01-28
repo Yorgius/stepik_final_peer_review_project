@@ -12,9 +12,13 @@ class ProfilePage(BasePage):
     def should_be_profile_page_header(self):
         assert self.is_element_present(*ProfilePageLocators.PAGE_HEADER)
 
-    def start_delete_user(self):
+    def start_delete_user(self, psw):
         delete_profile_submit = self.browser.find_element(*ProfilePageLocators.START_DELETE_PROFILE_SUBMIT)
         delete_profile_submit.click()
+
+        profile_delete_page = DeleteProfilePage(self.browser, self.browser.current_url)
+        profile_delete_page.should_be_delete_profile_page()
+        profile_delete_page.delete_user(psw)
 
 
 class DeleteProfilePage(BasePage):

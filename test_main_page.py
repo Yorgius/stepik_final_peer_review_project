@@ -9,7 +9,6 @@ from .pages.locators import MainPageLocators
 
 MAIN_PAGE_URL = MainPageLocators.URL
 
-@pytest.mark.main_to_login
 def test_guest_can_go_to_login_page(browser):
     main_page = MainPage(browser, MAIN_PAGE_URL)
 
@@ -21,7 +20,6 @@ def test_guest_can_go_to_login_page(browser):
     login_page.should_be_login_page()
 
 
-@pytest.mark.main_to_basket
 def test_guest_cant_see_product_in_basket_opened_from_main_page(browser):
     main_page = MainPage(browser, MAIN_PAGE_URL)
     
