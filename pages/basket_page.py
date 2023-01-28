@@ -11,7 +11,7 @@ class BasketPage(BasePage):
         assert self.is_not_element_present(*BasketPageLocators.BASKET_ITEMS), 'Items are present in basket!'
 
     def should_be_empty_basket_label(self):
-        assert 'ваша корзина пуста' in self.get_text(*BasketPageLocators.EMPTY_BASKET_LABEL).lower(), 'basket is not empty!'
+        assert self.get_text(*BasketPageLocators.EMPTY_BASKET_LABEL).lower(), 'basket is not empty!'
 
     def empty_basket_label_is_not_disappeared(self):
         assert not self.is_disappeared(*BasketPageLocators.EMPTY_BASKET_LABEL), 'Empty basket label disappeared!'

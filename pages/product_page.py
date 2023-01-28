@@ -3,7 +3,7 @@ from selenium.common.exceptions import NoAlertPresentException
 import math
 
 from .base_page import BasePage
-from .locators import ProductPageLocators
+from .locators import ProductPageLocators, BasePageLocators
 
 class ProductPage(BasePage):
     def should_be_product_page(self):
@@ -13,10 +13,10 @@ class ProductPage(BasePage):
         assert self.product_name and self.product_price and add_to_basket_btn, 'this is not product page!'
 
     def should_be_basket_link(self):
-        assert self.is_element_present(*ProductPageLocators.BASKET_LINK), 'This page does not contain basket link'
+        assert self.is_element_present(*BasePageLocators.BASKET_LINK), 'This page does not contain basket link'
 
     def go_to_basket(self):
-        basket_link = self.browser.find_element(*ProductPageLocators.BASKET_LINK)
+        basket_link = self.browser.find_element(*BasePageLocators.BASKET_LINK)
         basket_link.click()
 
     def add_product_to_basket(self):

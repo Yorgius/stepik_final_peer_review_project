@@ -82,8 +82,7 @@ class TestGuestAddToBasketFromProductPage:
         basket_page = BasketPage(browser, browser.current_url)
         basket_page.should_be_basket_page()
         basket_page.no_items_in_the_basket()
-        basket_page.should_be_empty_basket_label()
-        basket_page.empty_basket_label_is_not_disappeared()
+        basket_page.is_basket_empty()
 
 
 # test class to add to cart from product page for logged in user
@@ -116,7 +115,7 @@ class TestUserAddToBasketFromProductPage:
         profile_delete_page.delete_user(psw)
 
         main_page = MainPage(browser, browser.current_url)
-        main_page.is_delete_success()
+        main_page.should_be_delete_user_success_message()
 
     @pytest.mark.need_review
     def test_user_can_add_product_to_basket(self, browser: object) -> None:

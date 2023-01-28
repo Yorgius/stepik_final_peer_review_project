@@ -4,11 +4,11 @@ from selenium.webdriver.common.by import By
 class BasePageLocators:
     USER_ICON = (By.CSS_SELECTOR, ".icon-user")
     LOGIN_LINK = (By.ID, "login_link")
+    BASKET_LINK = (By.CSS_SELECTOR, ".basket-mini>.btn-group>a")
 
 
 class MainPageLocators:
     URL = "http://selenium1py.pythonanywhere.com/"
-    BASKET_LINK = (By.XPATH, "//a[text()='Посмотреть корзину']")
     DELETE_USER_SUCCESS_MESSAGE = (By.CLASS_NAME, "alertinner")
 
 
@@ -39,7 +39,7 @@ class ProductPageLocators:
     SUCCESS_MESSAGES_BLOCK = (By.ID, 'messages')
     SUCCESS_MESSAGE_PRODUCT_NAME = (By.CSS_SELECTOR, '#messages > .alert:nth-child(1) strong')
     SUCCESS_MESSAGE_CART_AMOUNT = (By.CSS_SELECTOR, '#messages > .alert:nth-child(3) strong')
-    BASKET_LINK = (By.XPATH, "//a[text()='Посмотреть корзину']")
+
 
 class BasketPageLocators:
     BASKET_ITEMS = (By.CLASS_NAME, 'basket-items')
